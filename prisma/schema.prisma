@@ -3,6 +3,114 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Users {
+  id              String     @id @default(uuid())
+  name            String
+  email           String     @unique
+  password        String
+  image           String?
+  created_at      DateTime   @default(now())
+  updated_at      DateTime
+  subscription_id String
+  projects        Projects[]
+  clients         Clients[]
+
+  subscription Subscription @relation(fields: [subscription_id], references: [id])
+
+  @@map("users")
+}
+
+model Projects {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  address     String
+  city        String
+  state       String
+  mapsUrl     String
+  size        Int
+  images      String[]
+  user_id     String
+  client_id   String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime
+  convenients Convenients[]
+
+  user   Users    @relation(fields: [user_id], references: [id])
+  client Clients? @relation(fields: [client_id], references: [id])
+
+
+  @@map("projects")
+}
+
+model Clients {
+  id         String   @id @default(uuid())
+  name       String
+  image      String?
+  user_id    String
+  project_id String
+  created_at DateTime @default(now())
+  updated_at DateTime
+
+  projects Projects[]
+  user     Users      @relation(fields: [user_id], references: [id])
+
+  @@map("clients")
+}
+
+model Convenients {
+  id          String           @id @default(uuid())
+  type        convenients_type
+  image360Uri String
+  project_id  String
+
+  projects Projects @relation(fields: [project_id], references: [id])
+
+  @@map("convenients")
+}
+
+model Subscription {
+  id          String              @id @default(uuid())
+  name        subscription_name
+  description String
+  price       Float
+  features    String[]
+  status      subscription_status
+  created_at  DateTime            @default(now())
+  updated_at  DateTime
+  end_date    DateTime
+  users       Users[]
+
+  @@map("subscriptions")
+}
+
+enum subscription_name {
+  Starter
+  Pro
+}
+
+enum convenients_type {
+  Banheiro
+  Cozinha
+  Quarto
+  Sala
+  Escritorio
+  Lavanderia
+  Garagem
+  Varanda
+  Jardim
+  SalaDeJantar
+  HallDeEntrada
+  Despensa
+  Closet
+  SalaDeEstar
+}
+
+enum subscription_status {
+  Expirado
+  Ativo
 }
