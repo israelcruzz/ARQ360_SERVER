@@ -8,9 +8,10 @@ import { generateCode } from "src/application/utils/generate-code";
 import dayjs from "dayjs";
 import { UserWithSameEmail } from "../../exceptions/user-with-same-email.exception";
 import { PassCodeError } from "../../exceptions/pass-code-error.exception";
+import { HashPasswordService } from "src/application/hash-password/hash-password.service";
 
 export class UserPrismaRepository implements UserRepository {
-  constructor(private readonly prismaService: PrismaService, private readonly mailService: MailService) { }
+  constructor(private readonly prismaService: PrismaService, private readonly mailService: MailService, private readonly hashPassService: HashPasswordService) { }
 
   public async create(data: CreateUserDto) {
     try {
@@ -52,7 +53,7 @@ export class UserPrismaRepository implements UserRepository {
     }
   }
 
-  public async upload(userId: string, data: UpdateUserDto) {
+  public async update(userId: string, data: UpdateUserDto) {
     try {
       const user = await this.findUserById(userId);
 
@@ -71,6 +72,8 @@ export class UserPrismaRepository implements UserRepository {
           ...updateData
         }
       })
+
+      return user.id
     } catch (error) {
       console.log(error);
     }
@@ -148,7 +151,7 @@ export class UserPrismaRepository implements UserRepository {
     }
   }
 
-  public async uploadPass(code: string, newPass: string) {
+  public async updatePass(code: string, newPass: string) {
     try {
       const user = await this.prismaService.users.findFirst({
         where: {
@@ -166,17 +169,21 @@ export class UserPrismaRepository implements UserRepository {
         throw new PassCodeError();
       }
 
+      const hashPass = await this.hashPassService.hashPassord(newPass)
+
       await this.prismaService.users.update({
         where: {
           id: user.id
         },
         data: {
-          password: newPass,
+          password: hashPass,
           updated_at: new Date(),
           password_code: null,
           password_code_expires: null
         }
       })
+
+      return user.id
     } catch (error) {
       console.log(error);
     }

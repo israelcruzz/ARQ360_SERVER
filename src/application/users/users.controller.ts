@@ -5,17 +5,17 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
-  // constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @Post('create')
   public async create(@Body() createUserDto: CreateUserDto) {
-    // return this.usersService.create(createUserDto);
+    return this.usersService.create(createUserDto);
   }
 
-  @Get('view')
-  public async findOne(@Param('id') id: string) {
-    // return this.usersService.findOne();
-  }
+  // @Get('view')
+  // public async findOne(@Param('id') id: string) {
+  //   return this.usersService.view();
+  // }
 
   @Patch('update')
   public async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
