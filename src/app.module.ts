@@ -1,20 +1,18 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { UsersModule } from './modules/users/users.module';
-import * as path from 'path';
+import { UsersModule } from './application/users/users.module';
+import { MailModule } from './application/mail/mail.module';
+import { MailService } from './application/mail/mail.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: path.resolve(
-        __dirname,
-        '../config',
-        `.env.${process.env.NODE_ENV === 'prod' ? 'prod' : 'dev'}`,
-      ),
+      envFilePath: `.env.${process.env.NODE_ENV === 'prod' ? 'prod' : 'dev'}`,
     }),
-    UsersModule,
+    // UsersModule,
+    MailModule,
   ],
-  providers: [],
+  providers: [MailService],
   controllers: [],
 })
-export class AppModule {}
+export class AppModule { }

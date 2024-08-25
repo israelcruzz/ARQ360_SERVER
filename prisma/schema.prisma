@@ -8,24 +8,26 @@ datasource db {
 }
 
 model Users {
-  id              String     @id @default(uuid())
-  name            String
-  email           String     @unique
-  password        String
-  image           String?
-  created_at      DateTime   @default(now())
-  updated_at      DateTime
-  subscription_id String
-  projects        Projects[]
-  clients         Clients[]
+  id                    String     @id @default(uuid())
+  name                  String
+  email                 String     @unique
+  password              String
+  image                 String?
+  created_at            DateTime   @default(now())
+  updated_at            DateTime?
+  subscription_id       String?
+  password_code         String? 
+  password_code_expires DateTime?
+  projects              Projects[]
+  clients               Clients[]
 
-  subscription Subscription @relation(fields: [subscription_id], references: [id])
+  subscription Subscription? @relation(fields: [subscription_id], references: [id])
 
   @@map("users")
 }
 
 model Projects {
-  id          String   @id @default(uuid())
+  id          String        @id @default(uuid())
   name        String
   description String
   address     String
@@ -36,13 +38,12 @@ model Projects {
   images      String[]
   user_id     String
   client_id   String?
-  created_at  DateTime @default(now())
+  created_at  DateTime      @default(now())
   updated_at  DateTime
   convenients Convenients[]
 
   user   Users    @relation(fields: [user_id], references: [id])
   client Clients? @relation(fields: [client_id], references: [id])
-
 
   @@map("projects")
 }
