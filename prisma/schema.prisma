@@ -7,27 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
-  id                    String     @id @default(uuid())
+model User {
+  id                    String    @id @default(uuid())
   name                  String
-  email                 String     @unique
+  email                 String    @unique
   password              String
   image                 String?
-  created_at            DateTime   @default(now())
+  created_at            DateTime  @default(now())
   updated_at            DateTime?
   subscription_id       String?
-  password_code         String? 
+  password_code         String?
   password_code_expires DateTime?
-  projects              Projects[]
-  clients               Clients[]
+  projects              Project[]
+  clients               Client[]
 
   subscription Subscription? @relation(fields: [subscription_id], references: [id])
 
   @@map("users")
 }
 
-model Projects {
-  id          String        @id @default(uuid())
+model Project {
+  id          String       @id @default(uuid())
   name        String
   description String
   address     String
@@ -38,17 +38,17 @@ model Projects {
   images      String[]
   user_id     String
   client_id   String?
-  created_at  DateTime      @default(now())
+  created_at  DateTime     @default(now())
   updated_at  DateTime
-  convenients Convenients[]
+  convenients Convenient[]
 
-  user   Users    @relation(fields: [user_id], references: [id])
-  client Clients? @relation(fields: [client_id], references: [id])
+  user   User    @relation(fields: [user_id], references: [id])
+  client Client? @relation(fields: [client_id], references: [id])
 
   @@map("projects")
 }
 
-model Clients {
+model Client {
   id         String   @id @default(uuid())
   name       String
   image      String?
@@ -57,19 +57,19 @@ model Clients {
   created_at DateTime @default(now())
   updated_at DateTime
 
-  projects Projects[]
-  user     Users      @relation(fields: [user_id], references: [id])
+  projects Project[]
+  user     User      @relation(fields: [user_id], references: [id])
 
   @@map("clients")
 }
 
-model Convenients {
+model Convenient {
   id          String           @id @default(uuid())
   type        convenients_type
   image360Uri String
   project_id  String
 
-  projects Projects @relation(fields: [project_id], references: [id])
+  projects Project @relation(fields: [project_id], references: [id])
 
   @@map("convenients")
 }
@@ -84,7 +84,7 @@ model Subscription {
   created_at  DateTime            @default(now())
   updated_at  DateTime
   end_date    DateTime
-  users       Users[]
+  users       User[]
 
   @@map("subscriptions")
 }

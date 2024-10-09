@@ -1,73 +1,56 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+/src
+|-- /domain               # Lógica de Domínio
+|   |-- /entities         # Entidades do Domínio
+|   |-- /value-objects     # Objetos de Valor
+|   |-- /aggregates       # Agregados
+|   |-- /repositories      # Interfaces de Repositórios
+|   |-- /services         # Serviços do Domínio
+|   |-- /events           # Eventos do Domínio
+|
+|-- /application          # Camada de Aplicação
+|   |-- /dtos             # Objetos de Transferência de Dados (DTOs)
+|   |-- /commands         # Comandos
+|   |-- /queries          # Consultas
+|   |-- /services         # Serviços de Aplicação
+|
+|-- /infrastructure       # Camada de Infraestrutura
+|   |-- /repositories      # Implementações dos Repositórios
+|   |-- /orm              # Configurações do ORM (ex: TypeORM, Prisma)
+|   |-- /middlewares      # Middleware (intermediários)
+|   |-- /config           # Configurações da Aplicação
+|   |-- /exceptions       # Exceções Personalizadas
+|
+|
+|-- /shared               # Componentes compartilhados
+|   |-- /utils            # Funções utilitárias
+|   |-- /constants        # Constantes
+|
+|-- app.module.ts         # Módulo Principal
+|-- main.ts               # Ponto de Entrada da Aplicação
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+| **Camada**      | **Responsabilidade**                                                                                                                                              |
+|------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Domínio**      | Contém a lógica central e as regras de negócio da aplicação.                                                                                                    |
+| **Entidades**    | Representam objetos que possuem identidade e ciclo de vida (ex: `User`, `Order`).                                                                                |
+| **Objetos de Valor** | Representam atributos sem identidade própria, definidos por seus valores (ex: `Email`, `Address`).                                                                |
+| **Agregados**    | Conjuntos de entidades e objetos de valor tratados como uma unidade (ex: `Order` que inclui `OrderItems`).                                                      |
+| **Repositórios** | Interfaces que definem operações de acesso a dados sem implementar a lógica (ex: métodos como `findById()`).                                                  |
+| **Serviços do Domínio** | Contêm lógica de negócio que não pertence a uma entidade ou objeto de valor, geralmente envolvendo regras complexas.                                            |
+| **Eventos do Domínio** | Representam eventos que ocorrem no domínio e podem ser utilizados para comunicação entre componentes.                                                       |
+| **Aplicação**    | Coordena as operações e interações entre a camada de domínio e a interface.                                                                                   |
+| **DTOs**        | Estruturas que transferem dados entre a camada de aplicação e a interface, incluindo validações.                                                                 |
+| **Comandos**     | Representam ações que alteram o estado do sistema (ex: `CreateUserCommand`).                                                                                   |
+| **Consultas**    | Operações de leitura que não alteram o estado (ex: `GetUserQuery`).                                                                                            |
+| **Serviços de Aplicação** | Coordenam a lógica entre o domínio e a interface, processando comandos e consultas e orquestrando operações.                                               |
+| **Infraestrutura** | Implementa a lógica de acesso a dados e outras preocupações técnicas.                                                                                          |
+| **Repositórios** | Implementações das interfaces de repositórios, utilizando um ORM para acesso a dados (ex: `UserRepository`).                                                      |
+| **ORM**          | Configurações e definições relacionadas ao ORM utilizado (ex: TypeORM, Prisma).                                                                                |
+| **Middlewares**  | Funções que processam requisições antes de chegarem aos controladores, usadas para autenticação, logging, etc.                                                 |
+| **Config**       | Contém configurações gerais da aplicação, como variáveis de ambiente e credenciais.                                                                             |
+| **Exceções**     | Definições de exceções personalizadas para tratamento de erros em toda a aplicação.                                                                             |
+| **Interface**    | Exponha a funcionalidade da aplicação ao mundo externo, gerenciando interações com o usuário.                                                                    |
+| **Controladores HTTP** | Recebem requisições HTTP e interagem com a camada de aplicação, delegando as chamadas aos serviços (ex: `UserController`).                                        |
+| **GraphQL Controllers** | Definem resolvers para consultas e mutações GraphQL, se aplicável.                                                                                          |
+| **Compartilhado** | Fornece utilidades e constantes para evitar repetição e facilitar a manutenção.                                                                                  |
+| **Utils**        | Funções auxiliares reutilizáveis em diferentes partes da aplicação.                                                                                            |
+| **Constants**    | Definições de constantes utilizadas em toda a aplicação para evitar duplicação de valores e facilitar manutenção.                                               |

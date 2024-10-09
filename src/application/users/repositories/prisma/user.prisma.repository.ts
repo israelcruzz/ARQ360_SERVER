@@ -1,14 +1,14 @@
 import { UserRepository } from "../user.repository";
 import { CreateUserDto } from "../../dto/create-user.dto";
-import { PrismaService } from "src/application/prisma/prisma.service";
+import { PrismaService } from "@/infra/database/prisma/prisma.service";
 import { UserNotFound } from "../../exceptions/user-not-found.exception";
 import { UpdateUserDto } from "../../dto/update-user.dto";
-import { MailService } from "src/application/mail/mail.service";
-import { generateCode } from "src/application/utils/generate-code";
+import { MailService } from "@/application/services/mail/mail.service";
+import { generateCode } from "@/core/shared/utils/generate-code";
 import dayjs from "dayjs";
 import { UserWithSameEmail } from "../../exceptions/user-with-same-email.exception";
 import { PassCodeError } from "../../exceptions/pass-code-error.exception";
-import { HashPasswordService } from "src/application/hash-password/hash-password.service";
+import { HashPasswordService } from "@/application/services/hash-password/hash-password.service";
 
 export class UserPrismaRepository implements UserRepository {
   constructor(private readonly prismaService: PrismaService, private readonly mailService: MailService, private readonly hashPassService: HashPasswordService) { }
