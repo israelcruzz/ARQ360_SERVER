@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { configPath } from '@/core/config/config-path';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `.env.${process.env.NODE_ENV === 'prod' ? 'prod' : 'dev'}`,
+      envFilePath: `.env.${configPath[process.env.NODE_ENV]}`,
+      isGlobal: true
     }),
   ],
   providers: [],
